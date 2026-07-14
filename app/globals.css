@@ -53,6 +53,25 @@ h4 {
   font-family: var(--font-space-grotesk), sans-serif;
 }
 
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 40s linear infinite;
+  will-change: transform;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;

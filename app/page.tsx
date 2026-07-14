@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { getFeaturedProjects } from "@/lib/db";
 import Hero from "@/components/Hero";
-import ProjectCard from "@/components/ProjectCard";
+import ProjectCarousel from "@/components/ProjectCarousel";
 import Reveal from "@/components/motion/Reveal";
+import { bio, experience, highlights } from "@/content/about";
 
 export const revalidate = 3600;
 
@@ -21,7 +22,7 @@ const skills = [
 ];
 
 export default async function HomePage() {
-  const featured = await getFeaturedProjects(3);
+  const featured = await getFeaturedProjects(8);
 
   return (
     <main>
@@ -48,14 +49,63 @@ export default async function HomePage() {
             </p>
           </Reveal>
         ) : (
-          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.map((p, i) => (
-              <Reveal key={p.id} delay={i * 0.1}>
-                <ProjectCard project={p} />
-              </Reveal>
-            ))}
-          </div>
+          <Reveal delay={0.1} className="mt-6">
+            <ProjectCarousel projects={featured} />
+          </Reveal>
         )}
+      </section>
+
+      <section className="mx-auto w-full max-w-5xl px-4 py-16">
+        <Reveal>
+          <div className="flex items-end justify-between">
+            <h2 className="font-heading text-2xl font-semibold">About me</h2>
+            <Link
+              href="/about"
+              className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Full profile →
+            </Link>
+          </div>
+          <p className="mt-4 max-w-2xl leading-relaxed text-foreground/90">
+            {bio[0]}
+          </p>
+        </Reveal>
+        <div className="mt-8 grid gap-8 md:grid-cols-2">
+          <Reveal delay={0.05}>
+            <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              Experience
+            </h3>
+            <ol className="mt-4 space-y-4 border-l border-border pl-5">
+              {experience.map((e) => (
+                <li key={e.org + e.period} className="relative">
+                  <span
+                    aria-hidden
+                    className="absolute -left-[1.6rem] top-1.5 h-2 w-2 rounded-full bg-accent"
+                  />
+                  <p className="text-xs text-muted-foreground">{e.period}</p>
+                  <p className="mt-0.5 text-sm font-medium">
+                    {e.title} · {e.org}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <h3 className="text-sm font-medium uppercase tracking-wide text-muted-foreground">
+              Highlights
+            </h3>
+            <ul className="mt-4 space-y-2">
+              {highlights.map((h) => (
+                <li key={h} className="flex items-start gap-2 text-sm">
+                  <span aria-hidden className="mt-0.5 text-accent">
+                    ★
+                  </span>
+                  <span className="text-foreground/90">{h}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
       </section>
 
       <section className="mx-auto w-full max-w-5xl px-4 py-16">
