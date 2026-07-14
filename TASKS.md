@@ -83,8 +83,11 @@
 
 ## Phase 9 — Deploy
 
-- [ ] Custom domain
-- [ ] Analytics (if chosen)
-- [ ] Final content review
-- [ ] Confirm Postgres + Blob stores are attached to the Vercel project (Storage tab) and env vars propagated
-- [ ] Confirm remaining env vars set in Vercel dashboard (MAILERSEND_API_TOKEN, ADMIN_EMAIL, JWT_SECRET)
+- [x] Production live at **https://bramchandra.vercel.app** (note: `chandra-portfolio.vercel.app` was taken by another user's site — claimed `bramchandra.vercel.app` instead; `NEXT_PUBLIC_SITE_URL` + `metadataBase` point there)
+- [x] GitHub repo `beramm/chandra-portfolio` pushed; connect to Vercel project (Settings → Git) for auto-deploys — **verify connected**
+- [ ] Custom domain (optional — `.vercel.app` subdomain works now)
+- [ ] Analytics (decide: none / Vercel Analytics)
+- [x] Seeded 5 CV projects via prod API (cover photos pending — add via `/admin`)
+- [ ] Final content review (project GitHub links are profile placeholder `github.com/beramm` — swap for real repo URLs in admin; add cover photos)
+- [x] Postgres (Neon) + Blob attached, env vars propagated
+- [x] All env vars in prod (MAILERSEND_API_TOKEN, MAILERSEND_FROM_EMAIL, ADMIN_EMAIL, JWT_SECRET, NEXT_PUBLIC_SITE_URL)
