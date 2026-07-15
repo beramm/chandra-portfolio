@@ -76,14 +76,14 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
         style={{ x }}
         className="flex w-max cursor-grab select-none gap-6 pr-6 active:cursor-grabbing"
       >
-        {projects.map((p) => (
+        {projects.map((p, i) => (
           <div key={p.id} className="w-80 shrink-0">
-            <ProjectCard project={p} />
+            <ProjectCard project={p} eager={i < 3} />
           </div>
         ))}
-        {projects.map((p) => (
+        {projects.map((p, i) => (
           <div key={`dup-${p.id}`} className="w-80 shrink-0" aria-hidden>
-            <ProjectCard project={p} />
+            <ProjectCard project={p} eager={i < 3} />
           </div>
         ))}
       </motion.div>

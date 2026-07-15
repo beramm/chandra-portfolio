@@ -3,7 +3,13 @@ import Link from "next/link";
 import type { Project } from "@/lib/db";
 import { formatType } from "@/lib/format";
 
-export default function ProjectCard({ project }: { project: Project }) {
+export default function ProjectCard({
+  project,
+  eager = false,
+}: {
+  project: Project;
+  eager?: boolean;
+}) {
   return (
     <Link
       href={`/projects/${project.slug}`}
@@ -16,6 +22,7 @@ export default function ProjectCard({ project }: { project: Project }) {
             src={project.cover_image_url}
             alt={project.name}
             fill
+            priority={eager}
             draggable={false}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
