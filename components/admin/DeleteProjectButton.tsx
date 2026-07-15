@@ -29,7 +29,7 @@ export default function DeleteProjectButton({
     <button
       onClick={handleDelete}
       disabled={loading}
-      className="text-sm text-red-400 hover:text-red-300 disabled:opacity-50"
+      className="text-sm text-red-500 transition-colors hover:text-red-400 disabled:opacity-50"
     >
       {loading ? "Deleting…" : "Delete"}
     </button>

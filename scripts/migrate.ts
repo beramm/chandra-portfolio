@@ -35,6 +35,16 @@ async function main() {
   `;
 
   await sql`
+    ALTER TABLE projects
+    ADD COLUMN IF NOT EXISTS tech_stack text[] NOT NULL DEFAULT '{}'
+  `;
+
+  await sql`
+    ALTER TABLE projects
+    ADD COLUMN IF NOT EXISTS gallery_images text[] NOT NULL DEFAULT '{}'
+  `;
+
+  await sql`
     CREATE TABLE IF NOT EXISTS otp_codes (
       id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
       email text NOT NULL,

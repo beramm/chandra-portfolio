@@ -57,34 +57,36 @@ export default function AdminLoginPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-950 px-4">
-      <div className="w-full max-w-sm rounded-lg border border-neutral-800 bg-neutral-900 p-6">
-        <h1 className="text-lg font-semibold text-neutral-100">Admin login</h1>
+    <main className="flex min-h-screen items-center justify-center px-4">
+      <div className="w-full max-w-sm rounded-lg border border-border bg-card p-6">
+        <h1 className="font-heading text-xl font-bold tracking-tight">
+          Admin login
+        </h1>
 
         {step === "email" ? (
           <form onSubmit={requestCode} className="mt-4 space-y-3">
-            <label className="block text-sm text-neutral-400">
+            <label className="block text-sm text-muted-foreground">
               Admin email
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded border border-neutral-700 bg-neutral-950 px-3 py-2 text-neutral-100 outline-none focus:border-neutral-500"
+                className="mt-1 w-full rounded border border-border bg-background px-3 py-2 text-foreground outline-none focus:border-accent"
                 placeholder="you@example.com"
               />
             </label>
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-white disabled:opacity-50"
+              className="w-full rounded-full bg-accent px-3 py-2 text-sm font-medium text-on-accent transition-opacity hover:opacity-90 disabled:opacity-50"
             >
               {loading ? "Sending…" : "Send code"}
             </button>
           </form>
         ) : (
           <form onSubmit={verifyCode} className="mt-4 space-y-3">
-            <p className="text-sm text-neutral-400">
+            <p className="text-sm text-muted-foreground">
               A 6-digit code was sent to your email.
             </p>
             <input
@@ -94,27 +96,27 @@ export default function AdminLoginPage() {
               required
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-              className="w-full rounded border border-neutral-700 bg-neutral-950 px-3 py-2 text-center text-lg tracking-[0.5em] text-neutral-100 outline-none focus:border-neutral-500"
+              className="w-full rounded border border-border bg-background px-3 py-2 text-center text-lg tracking-[0.5em] text-foreground outline-none focus:border-accent"
               placeholder="••••••"
             />
             <button
               type="submit"
               disabled={loading || code.length !== 6}
-              className="w-full rounded bg-neutral-100 px-3 py-2 text-sm font-medium text-neutral-900 hover:bg-white disabled:opacity-50"
+              className="w-full rounded-full bg-accent px-3 py-2 text-sm font-medium text-on-accent transition-opacity hover:opacity-90 disabled:opacity-50"
             >
               {loading ? "Verifying…" : "Verify"}
             </button>
             <button
               type="button"
               onClick={() => setStep("email")}
-              className="w-full text-xs text-neutral-500 hover:text-neutral-300"
+              className="w-full text-xs text-muted-foreground transition-colors hover:text-foreground"
             >
               Use a different email / resend
             </button>
           </form>
         )}
 
-        {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
+        {error && <p className="mt-3 text-sm text-red-500">{error}</p>}
       </div>
     </main>
   );

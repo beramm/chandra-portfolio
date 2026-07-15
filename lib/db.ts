@@ -6,12 +6,18 @@ export type Project = {
   slug: string;
   description: string;
   type: string;
+  tech_stack: string[];
   cover_image_url: string;
+  gallery_images: string[];
   github_url: string;
   live_url: string | null;
   created_at: string;
   updated_at: string;
 };
+
+// pg serializes string[] -> '{a,b}' for text[] params; cast is TS-only
+// (@vercel/postgres Primitive type excludes arrays).
+const asPgArray = (v: string[]) => v as unknown as string;
 
 export type OtpCode = {
   id: string;
@@ -30,9 +36,15 @@ export async function getProjects(): Promise<Project[]> {
   return rows;
 }
 
-export async function getProjectsByType(type: string): Promise<Project[]> {
+export async function getProjectsFiltered(
+  type?: string,
+  tech?: string,
+): Promise<Project[]> {
   const { rows } = await sql<Project>`
-    SELECT * FROM projects WHERE type = ${type} ORDER BY created_at DESC
+    SELECT * FROM projects
+    WHERE (${type ?? null}::text IS NULL OR type = ${type ?? null})
+      AND (${tech ?? null}::text IS NULL OR ${tech ?? null} = ANY(tech_stack))
+    ORDER BY created_at DESC
   `;
   return rows;
 }
@@ -65,6 +77,13 @@ export async function getProjectTypes(): Promise<string[]> {
   return rows.map((r) => r.type);
 }
 
+export async function getTechStacks(): Promise<string[]> {
+  const { rows } = await sql<{ tech: string }>`
+    SELECT DISTINCT unnest(tech_stack) AS tech FROM projects ORDER BY tech
+  `;
+  return rows.map((r) => r.tech);
+}
+
 export async function slugExists(slug: string): Promise<boolean> {
   const { rows } = await sql`
     SELECT 1 FROM projects WHERE slug = ${slug} LIMIT 1
@@ -77,14 +96,18 @@ export async function createProject(data: {
   slug: string;
   description: string;
   type: string;
+  tech_stack: string[];
   cover_image_url: string;
+  gallery_images: string[];
   github_url: string;
   live_url: string | null;
 }): Promise<Project> {
   const { rows } = await sql<Project>`
-    INSERT INTO projects (name, slug, description, type, cover_image_url, github_url, live_url)
+    INSERT INTO projects (name, slug, description, type, tech_stack, cover_image_url, gallery_images, github_url, live_url)
     VALUES (${data.name}, ${data.slug}, ${data.description}, ${data.type},
-            ${data.cover_image_url}, ${data.github_url}, ${data.live_url})
+            ${asPgArray(data.tech_stack)}, ${data.cover_image_url},
+            ${asPgArray(data.gallery_images)},
+            ${data.github_url}, ${data.live_url})
     RETURNING *
   `;
   return rows[0];
@@ -97,7 +120,9 @@ export async function updateProject(
     slug: string;
     description: string;
     type: string;
+    tech_stack: string[];
     cover_image_url: string;
+    gallery_images: string[];
     github_url: string;
     live_url: string | null;
   },
@@ -108,7 +133,9 @@ export async function updateProject(
         slug = ${data.slug},
         description = ${data.description},
         type = ${data.type},
+        tech_stack = ${asPgArray(data.tech_stack)},
         cover_image_url = ${data.cover_image_url},
+        gallery_images = ${asPgArray(data.gallery_images)},
         github_url = ${data.github_url},
         live_url = ${data.live_url},
         updated_at = now()

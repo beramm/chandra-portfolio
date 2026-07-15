@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { getProjects, getProjectsByType, getProjectTypes } from "@/lib/db";
+import { getProjectsFiltered, getProjectTypes, getTechStacks } from "@/lib/db";
+import { formatType } from "@/lib/format";
 import ProjectCard from "@/components/ProjectCard";
+import ProjectFilters from "@/components/ProjectFilters";
 import Reveal from "@/components/motion/Reveal";
 
 export const revalidate = 3600;
@@ -15,13 +16,21 @@ export const metadata: Metadata = {
 export default async function ProjectsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ type?: string }>;
+  searchParams: Promise<{ type?: string; tech?: string }>;
 }) {
-  const { type } = await searchParams;
-  const [types, projects] = await Promise.all([
+  const { type, tech } = await searchParams;
+  const [types, techs, projects] = await Promise.all([
     getProjectTypes(),
-    type ? getProjectsByType(type) : getProjects(),
+    getTechStacks(),
+    getProjectsFiltered(type, tech),
   ]);
+
+  const activeFilters = [
+    type && `type "${formatType(type)}"`,
+    tech && `tech "${tech}"`,
+  ]
+    .filter(Boolean)
+    .join(" and ");
 
   return (
     <main className="mx-auto w-full max-w-5xl px-4 py-16">
@@ -34,18 +43,15 @@ export default async function ProjectsPage({
         </p>
       </Reveal>
 
-      {types.length > 0 && (
+      {(types.length > 0 || techs.length > 0) && (
         <Reveal delay={0.05}>
-          <div className="mt-8 flex flex-wrap gap-2">
-            <FilterChip href="/projects" label="all" active={!type} />
-            {types.map((t) => (
-              <FilterChip
-                key={t}
-                href={`/projects?type=${encodeURIComponent(t)}`}
-                label={t}
-                active={type === t}
-              />
-            ))}
+          <div className="mt-8">
+            <ProjectFilters
+              types={types}
+              techs={techs}
+              activeType={type}
+              activeTech={tech}
+            />
           </div>
         </Reveal>
       )}
@@ -53,7 +59,9 @@ export default async function ProjectsPage({
       {projects.length === 0 ? (
         <Reveal delay={0.1}>
           <p className="mt-10 text-sm text-muted-foreground">
-            {type ? `No projects of type "${type}".` : "No projects yet."}
+            {activeFilters
+              ? `No projects match ${activeFilters}.`
+              : "No projects yet."}
           </p>
         </Reveal>
       ) : (
@@ -66,28 +74,5 @@ export default async function ProjectsPage({
         </div>
       )}
     </main>
-  );
-}
-
-function FilterChip({
-  href,
-  label,
-  active,
-}: {
-  href: string;
-  label: string;
-  active: boolean;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-        active
-          ? "border-accent bg-accent text-on-accent"
-          : "border-border text-muted-foreground hover:border-accent hover:text-foreground"
-      }`}
-    >
-      {label}
-    </Link>
   );
 }

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getProjectBySlug } from "@/lib/db";
+import { formatType } from "@/lib/format";
 import Reveal from "@/components/motion/Reveal";
+import ImageCarousel from "@/components/ImageCarousel";
 
 export const revalidate = 3600;
 
@@ -27,6 +28,12 @@ export default async function ProjectDetailPage({ params }: Props) {
   const project = await getProjectBySlug(slug);
   if (!project) notFound();
 
+  const images = Array.from(
+    new Set(
+      [project.cover_image_url, ...project.gallery_images].filter(Boolean),
+    ),
+  );
+
   const created = new Date(project.created_at).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -46,23 +53,29 @@ export default async function ProjectDetailPage({ params }: Props) {
             {project.name}
           </h1>
           <span className="rounded-full bg-muted px-3 py-1 text-xs text-muted-foreground">
-            {project.type}
+            {formatType(project.type)}
           </span>
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{created}</p>
+        {project.tech_stack.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {project.tech_stack.map((t) => (
+              <Link
+                key={t}
+                href={`/projects?tech=${encodeURIComponent(t)}`}
+                className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-accent hover:text-foreground"
+              >
+                {t}
+              </Link>
+            ))}
+          </div>
+        )}
       </Reveal>
 
-      {project.cover_image_url && (
+      {images.length > 0 && (
         <Reveal delay={0.1}>
-          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-lg border border-border bg-muted">
-            <Image
-              src={project.cover_image_url}
-              alt={project.name}
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 768px"
-              className="object-cover"
-            />
+          <div className="mt-8">
+            <ImageCarousel images={images} alt={project.name} />
           </div>
         </Reveal>
       )}

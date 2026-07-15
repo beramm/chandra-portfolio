@@ -91,3 +91,19 @@
 - [ ] Final content review (project GitHub links are profile placeholder `github.com/beramm` — swap for real repo URLs in admin; add cover photos)
 - [x] Postgres (Neon) + Blob attached, env vars propagated
 - [x] All env vars in prod (MAILERSEND_API_TOKEN, MAILERSEND_FROM_EMAIL, ADMIN_EMAIL, JWT_SECRET, NEXT_PUBLIC_SITE_URL)
+
+## Phase 10 — Revision 1 (tech stack, filters, UX polish)
+
+- [x] `tech_stack text[] NOT NULL DEFAULT '{}'` — idempotent ALTER in `scripts/migrate.ts`, ran `npm run migrate` (re-ran to confirm idempotency)
+- [x] `lib/db.ts` — `Project.tech_stack`, create/update SQL (pg array cast), `getTechStacks()` (unnest distinct), `getProjectsFiltered(type?, tech?)` replaces `getProjectsByType`
+- [x] `lib/validate.ts` — parse/trim/dedupe `tech_stack` (optional, default `[]`, cap 20)
+- [x] Admin: `TechStackInput` tag-chips (free-form Enter/comma + suggestions from DB) wired into `ProjectForm` + new/edit pages
+- [x] Tech chips on `ProjectCard` (max 4 + `+N` overflow, spans — card is a Link) and detail page (linked to `/projects?tech=`)
+- [x] `/projects` — `?tech=` filter, type+tech compose (AND), labeled chip rows preserve other param, filter-aware empty state
+- [x] Home stack chips link to `/projects?tech=<name>` (empty state covers non-matching labels)
+- [x] `formatType()` in `lib/format.ts` (AI/ML/etc acronyms + title case) applied to card, detail, admin list, filter chips
+- [x] Smooth scroll: `html { scroll-behavior: smooth }` + `data-scroll-behavior="smooth"` on `<html>` + `scroll-mt-16` on `#contact`
+- [x] Skeletons: shared `components/Skeleton.tsx` + `loading.tsx` for `/`, `/projects`, `/projects/[slug]`, `/admin/projects`
+- [x] `npm run lint` + `npm run build` pass; DB smoke test: array insert/update/filter verified against live DB (temp row cleaned up)
+- [ ] Manual browser checks: admin tech tags flow, filters combined, smooth scroll from `/projects` → `/#contact`, skeletons on throttled load
+- [ ] Fill in `tech_stack` for the 5 seeded projects via `/admin` (all currently `{}`)

@@ -43,6 +43,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
+      data-scroll-behavior="smooth"
       className={`${spaceGrotesk.variable} ${archivo.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background text-foreground">

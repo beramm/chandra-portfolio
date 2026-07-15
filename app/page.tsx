@@ -115,18 +115,23 @@ export default async function HomePage() {
         <Reveal delay={0.1}>
           <ul className="mt-6 flex flex-wrap gap-2">
             {skills.map((s) => (
-              <li
-                key={s}
-                className="rounded-full border border-border px-3 py-1 text-sm text-muted-foreground"
-              >
-                {s}
+              <li key={s}>
+                <Link
+                  href={`/projects?tech=${encodeURIComponent(s)}`}
+                  className="inline-block rounded-full border border-border px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-accent hover:text-foreground"
+                >
+                  {s}
+                </Link>
               </li>
             ))}
           </ul>
         </Reveal>
       </section>
 
-      <section id="contact" className="mx-auto w-full max-w-5xl px-4 py-16">
+      <section
+        id="contact"
+        className="mx-auto w-full max-w-5xl scroll-mt-16 px-4 py-16"
+      >
         <Reveal>
           <h2 className="font-heading text-2xl font-semibold">Get in touch</h2>
           <p className="mt-3 max-w-xl text-muted-foreground">

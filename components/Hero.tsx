@@ -46,12 +46,18 @@ export default function Hero() {
         >
           View projects
         </Link>
-        <Link
-          href="/#contact"
+        <a
+          href="#contact"
+          onClick={(e) => {
+            e.preventDefault();
+            document
+              .getElementById("contact")
+              ?.scrollIntoView({ behavior: "smooth" });
+          }}
           className="rounded border border-border px-5 py-2.5 text-sm transition-colors hover:border-accent"
         >
           Contact
-        </Link>
+        </a>
       </motion.div>
     </motion.section>
   );

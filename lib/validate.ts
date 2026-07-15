@@ -2,7 +2,9 @@ export type ProjectInput = {
   name: string;
   description: string;
   type: string;
+  tech_stack: string[];
   cover_image_url: string;
+  gallery_images: string[];
   github_url: string;
   live_url: string | null;
 };
@@ -32,6 +34,25 @@ export function parseProjectInput(
     typeof b.cover_image_url === "string" ? b.cover_image_url.trim() : "";
   const githubUrl = typeof b.github_url === "string" ? b.github_url.trim() : "";
   const liveUrl = typeof b.live_url === "string" ? b.live_url.trim() : "";
+  const rawTech = Array.isArray(b.tech_stack) ? b.tech_stack : [];
+  const techStack = Array.from(
+    new Set(
+      rawTech
+        .filter((t): t is string => typeof t === "string")
+        .map((t) => t.trim())
+        .filter(Boolean),
+    ),
+  ).slice(0, 20);
+
+  const rawGallery = Array.isArray(b.gallery_images) ? b.gallery_images : [];
+  const galleryImages = Array.from(
+    new Set(
+      rawGallery
+        .filter((u): u is string => typeof u === "string")
+        .map((u) => u.trim())
+        .filter(Boolean),
+    ),
+  ).slice(0, 12);
 
   if (!name) return { error: "Name is required" };
   if (!description) return { error: "Description is required" };
@@ -45,13 +66,18 @@ export function parseProjectInput(
   if (coverImageUrl && !isValidUrl(coverImageUrl)) {
     return { error: "Cover image URL must be a valid URL" };
   }
+  if (galleryImages.some((u) => !isValidUrl(u))) {
+    return { error: "Gallery image URLs must be valid URLs" };
+  }
 
   return {
     data: {
       name,
       description,
       type,
+      tech_stack: techStack,
       cover_image_url: coverImageUrl,
+      gallery_images: galleryImages,
       github_url: githubUrl,
       live_url: liveUrl || null,
     },
