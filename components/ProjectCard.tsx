@@ -6,9 +6,11 @@ import { formatType } from "@/lib/format";
 export default function ProjectCard({
   project,
   eager = false,
+  sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
 }: {
   project: Project;
   eager?: boolean;
+  sizes?: string;
 }) {
   return (
     <Link
@@ -24,7 +26,7 @@ export default function ProjectCard({
             fill
             priority={eager}
             draggable={false}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes={sizes}
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (

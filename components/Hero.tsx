@@ -8,9 +8,12 @@ const container: Variants = {
   show: { transition: { staggerChildren: 0.12 } },
 };
 
+// Transform-only (no opacity fade): the hero heading/tagline is the page's
+// LCP element, and an opacity-0 start delays the recorded paint until the
+// animation ends.
 const item: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  hidden: { y: 24 },
+  show: { y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
 export default function Hero({ cvUrl }: { cvUrl?: string | null }) {

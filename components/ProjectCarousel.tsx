@@ -78,12 +78,12 @@ export default function ProjectCarousel({ projects }: { projects: Project[] }) {
       >
         {projects.map((p, i) => (
           <div key={p.id} className="w-80 shrink-0">
-            <ProjectCard project={p} eager={i < 3} />
+            <ProjectCard project={p} eager={i < 3} sizes="320px" />
           </div>
         ))}
         {projects.map((p, i) => (
           <div key={`dup-${p.id}`} className="w-80 shrink-0" aria-hidden>
-            <ProjectCard project={p} eager={i < 3} />
+            <ProjectCard project={p} eager={i < 3} sizes="320px" />
           </div>
         ))}
       </motion.div>
