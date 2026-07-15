@@ -18,6 +18,12 @@ export default async function AdminProjectsPage() {
         </h1>
         <div className="flex items-center gap-3">
           <Link
+            href="/admin/cv"
+            className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+          >
+            CV
+          </Link>
+          <Link
             href="/admin/projects/new"
             className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-on-accent transition-colors hover:opacity-90"
           >

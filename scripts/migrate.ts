@@ -45,6 +45,16 @@ async function main() {
   `;
 
   await sql`
+    CREATE TABLE IF NOT EXISTS cvs (
+      id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+      filename text NOT NULL,
+      url text NOT NULL,
+      is_active boolean NOT NULL DEFAULT false,
+      created_at timestamptz NOT NULL DEFAULT now()
+    )
+  `;
+
+  await sql`
     CREATE TABLE IF NOT EXISTS otp_codes (
       id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
       email text NOT NULL,

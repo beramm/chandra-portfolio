@@ -13,7 +13,7 @@ const item: Variants = {
   show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
 
-export default function Hero() {
+export default function Hero({ cvUrl }: { cvUrl?: string | null }) {
   const reduced = useReducedMotion();
 
   return (
@@ -58,6 +58,14 @@ export default function Hero() {
         >
           Contact
         </a>
+        {cvUrl && (
+          <a
+            href={`${cvUrl}?download=1`}
+            className="rounded border border-border px-5 py-2.5 text-sm transition-colors hover:border-accent"
+          >
+            Download CV
+          </a>
+        )}
       </motion.div>
     </motion.section>
   );

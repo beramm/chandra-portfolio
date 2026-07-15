@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getFeaturedProjects } from "@/lib/db";
+import { getActiveCv, getFeaturedProjects } from "@/lib/db";
 import Hero from "@/components/Hero";
 import ProjectCarousel from "@/components/ProjectCarousel";
 import Reveal from "@/components/motion/Reveal";
@@ -22,11 +22,14 @@ const skills = [
 ];
 
 export default async function HomePage() {
-  const featured = await getFeaturedProjects(8);
+  const [featured, cv] = await Promise.all([
+    getFeaturedProjects(8),
+    getActiveCv(),
+  ]);
 
   return (
     <main>
-      <Hero />
+      <Hero cvUrl={cv?.url ?? null} />
 
       <section className="mx-auto w-full max-w-5xl px-4 py-16">
         <Reveal>

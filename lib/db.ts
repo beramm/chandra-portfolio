@@ -150,6 +150,65 @@ export async function deleteProject(id: string): Promise<boolean> {
   return (rowCount ?? 0) > 0;
 }
 
+// --- CVs ---
+
+export type Cv = {
+  id: string;
+  filename: string;
+  url: string;
+  is_active: boolean;
+  created_at: string;
+};
+
+export async function getCvs(): Promise<Cv[]> {
+  const { rows } = await sql<Cv>`
+    SELECT * FROM cvs ORDER BY created_at DESC
+  `;
+  return rows;
+}
+
+export async function getActiveCv(): Promise<Cv | null> {
+  const { rows } = await sql<Cv>`
+    SELECT * FROM cvs WHERE is_active LIMIT 1
+  `;
+  return rows[0] ?? null;
+}
+
+export async function createCv(
+  filename: string,
+  url: string,
+  isActive: boolean,
+): Promise<Cv> {
+  if (isActive) {
+    await sql`UPDATE cvs SET is_active = false WHERE is_active`;
+  }
+  const { rows } = await sql<Cv>`
+    INSERT INTO cvs (filename, url, is_active)
+    VALUES (${filename}, ${url}, ${isActive})
+    RETURNING *
+  `;
+  return rows[0];
+}
+
+export async function setActiveCv(id: string): Promise<boolean> {
+  const { rowCount } = await sql`
+    UPDATE cvs SET is_active = (id = ${id})
+  `;
+  return (rowCount ?? 0) > 0;
+}
+
+export async function getCvById(id: string): Promise<Cv | null> {
+  const { rows } = await sql<Cv>`
+    SELECT * FROM cvs WHERE id = ${id} LIMIT 1
+  `;
+  return rows[0] ?? null;
+}
+
+export async function deleteCv(id: string): Promise<boolean> {
+  const { rowCount } = await sql`DELETE FROM cvs WHERE id = ${id}`;
+  return (rowCount ?? 0) > 0;
+}
+
 // --- OTP codes ---
 
 export async function createOtpCode(
