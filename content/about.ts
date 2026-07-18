@@ -1,5 +1,5 @@
 export const bio = [
-  "I'm Bram Raiskay Chandra, an AI Engineer based in Denpasar, Bali. I studied Informatics at Sanata Dharma University and now build AI-powered products — from real-time LLM companions on Gemini to deep-learning models for computer vision.",
+  "I'm Bram Raiskay Chandra, an AI Engineer based in Denpasar, Bali. I studied Informatics at Sanata Dharma University and now build AI-powered products, from deep-learning models for computer vision to real-time LLM companions on Gemini",
   "At PT. Sinergi Merah Putih I design LLM workflows with function calling, grounding, and streaming, and deploy them on Google Cloud. Currently I'm also at the Apple Developer Academy Bali 2026, exploring the intersection of AI and mobile applications.",
 ];
 

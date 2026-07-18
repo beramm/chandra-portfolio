@@ -39,7 +39,7 @@ export default function Hero({ cvUrl }: { cvUrl?: string | null }) {
         variants={item}
         className="mt-4 max-w-xl text-lg text-muted-foreground"
       >
-        AI Engineer building LLM-powered products — real-time Gemini systems,
+        AI Engineer building LLM-powered products, real-time Gemini systems,
         deep learning for computer vision, and full-stack apps on Google Cloud.
       </motion.p>
       <motion.div variants={item} className="mt-8 flex gap-3">

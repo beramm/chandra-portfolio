@@ -15,7 +15,7 @@ export default function Footer() {
   return (
     <footer className="border-t border-border">
       <div className="mx-auto flex w-full max-w-5xl flex-col items-center justify-between gap-3 px-4 py-6 text-sm text-muted-foreground sm:flex-row">
-        <p>© {new Date().getFullYear()} Bram Raiskay Chandra</p>
+        <p>Bram Raiskay Chandra</p>
         <div className="flex gap-4">
           {socials.map((s) => (
             <a

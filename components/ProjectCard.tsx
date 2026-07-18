@@ -7,15 +7,18 @@ export default function ProjectCard({
   project,
   eager = false,
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
+  tabbable = true,
 }: {
   project: Project;
   eager?: boolean;
   sizes?: string;
+  tabbable?: boolean;
 }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
       draggable={false}
+      tabIndex={tabbable ? undefined : -1}
       className="group overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-accent"
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-muted">
